@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+
+  <body>
+    <my-paragraph>
+      <span slot="text-contents">Text Contents</span>
+    </my-paragraph>
+
+    <my-paragraph></my-paragraph>
+
+    <template my-paragraph>
+      <p class="title">My Paragraph</p>
+      <p><slot name="text-contents">Nothing</slot></p>
+
+      <style>
+        p.title {
+          font-size: 30px;
+        }
+      </style>
+    </template>
+
+    <script>
+      customElements.define(
+        'my-paragraph',
+        class extends HTMLElement {
+          constructor() {
+            super();
+
+            const template = document.querySelector('template[my-paragraph]');
+
+            this.attachShadow({ mode: 'open' });
+
+            this.shadowRoot.appendChild(template.content.cloneNode(true));
+          }
+        }
+      )
+    </script>
+  </body>
+</html>

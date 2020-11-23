@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+
+  <body>
+    <popup-info
+      img="./img/circle.png"
+      data-text="text contents"></popup-info>
+
+    <script>
+      class PopupInfo extends HTMLElement {
+        constructor() {
+          super();
+
+          // create shadow root
+          this.attachShadow({ mode: 'open' });
+
+          // create nested elements
+          const wrapper = document.createElement('span');
+          wrapper.classList.add('wrapper');
+
+          const icon = wrapper.appendChild(document.createElement('span'));
+          icon.classList.add('icon');
+          icon.setAttribute('tabindex', 0);
+
+          const img = icon.appendChild(document.createElement('img'));
+          img.src = this.hasAttribute('img') ? this.getAttribute('img') : './img/default.png';
+
+          const info = wrapper.appendChild(document.createElement('span'));
+          info.classList.add('info');
+          info.textContent = this.getAttribute('data-text');
+
+          const style = document.createElement('style');
+          style.textContent = `
+            span.wrapper:hover span.info {
+              display: block;
+            }
+
+            span.wrapper span.info {
+              display: none;
+            }
+          `;
+
+          // attach custom element to the shadow dom
+          this.shadowRoot.append(style, wrapper);
+        }
+      }
+
+      customElements.define('popup-info', PopupInfo);
+    </script>
+  </body>
+</html>
